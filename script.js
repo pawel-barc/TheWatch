@@ -43,3 +43,37 @@ function updateTime() {
 // Met à jour l'heure chaque seconde
 setInterval(updateTime, 1000);
 updateTime();
+
+// Fonction qui gère le calendrier pour afficher la date actuelle
+function setCurrentDate() {
+  const today = new Date();
+  const currentDate = today.getDate();
+
+  const dateDisplay = document.getElementById("calendar-complication-id");
+  if (dateDisplay) {
+    dateDisplay.textContent = currentDate;
+  }
+}
+setCurrentDate();
+
+// Fonction qui gère la phase de la lune
+function setMoonPhase() {
+  const now = new Date();
+  // Une date exemple de la nouvelle lune
+  const newMoonDate = new Date(2025, 1, 28, 1, 46);
+
+  // Nombre des jours écoulés depuis la nouvelle lune
+  const differenceDays = (now - newMoonDate) / (1000 * 60 * 60 * 24);
+
+  // La durée du cycle lunaire
+  const moonCycle = (differenceDays % 29.53) / 29.53;
+
+  // Gestion de l'ombre
+  const shadowOffset = (moonCycle - 0.5) * 1.1 + "vw";
+  const shadowOpacity = Math.abs(moonCycle - 2) * 2;
+
+  document.documentElement.style.setProperty("--moon-phase", shadowOffset);
+  document.documentElement.style.setProperty("--moon-opacity", shadowOpacity);
+}
+setInterval(setMoonPhase, 1000);
+setMoonPhase();
