@@ -56,24 +56,39 @@ function setCurrentDate() {
 }
 setCurrentDate();
 
-// Fonction qui gère la phase de la lune
+////////////////// Fonction qui gère la phase de la lune/////////////////////////////
 function setMoonPhase() {
+  // Définition de la date et de l'heure exactes de la nouvelle lune
+  const newMoonDate = new Date(2024, 6, 5, 22, 57); // 5 Juillet 2024 à 22h57
   const now = new Date();
-  // Une date exemple de la nouvelle lune
-  const newMoonDate = new Date(2025, 1, 28, 1, 46);
+  // Nombre des jours ecoulés depuis le 5 Juillet
+  const daysSinceNewMoon = (now - newMoonDate) / (1000 * 60 * 60 * 24);
+  // Calcul de la phase lunaire actuelle (valeur entre 0 et 1)
+  const phase = (daysSinceNewMoon % 29.53) / 29.53;
 
-  // Nombre des jours écoulés depuis la nouvelle lune
-  const differenceDays = (now - newMoonDate) / (1000 * 60 * 60 * 24);
+  let shadowPosition;
+  // Si la phase est inférieure à 0.5, on simule la progression entre le premier quartier et la plaine lune
+  if (phase < 0.5) {
+    shadowPosition = 30 * (1 - phase * 2);
+  } else {
+    // Si la phase est supérieure à 0.5, on simule la progression entre la plaine lune et la nouvelle lune
+    shadowPosition = 30 * ((phase - 0.5) * 2);
+  }
 
-  // La durée du cycle lunaire
-  const moonCycle = (differenceDays % 29.53) / 29.53;
+  // Calcul de l'opacité de l'ombre (valeur entre 0 et 1)
+  const shadowVisibility = Math.abs(phase - 0.5) * 2;
 
-  // Gestion de l'ombre
-  const shadowOffset = (moonCycle - 0.5) * 1.1 + "vw";
-  const shadowOpacity = Math.abs(moonCycle - 2) * 2;
-
-  document.documentElement.style.setProperty("--moon-phase", shadowOffset);
-  document.documentElement.style.setProperty("--moon-opacity", shadowOpacity);
+  // Application des valeurs CSS pour modifier l'affichage de la lune
+  document.documentElement.style.setProperty(
+    "--shadow-position",
+    `${shadowPosition}px`
+  );
+  document.documentElement.style.setProperty(
+    "--shadow-visibility",
+    shadowVisibility
+  );
 }
-setInterval(setMoonPhase, 1000);
+
+// Mise à jour automatique toutes les minutes
+setInterval(setMoonPhase, 60000);
 setMoonPhase();
