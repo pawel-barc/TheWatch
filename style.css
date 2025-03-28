@@ -168,11 +168,11 @@ h1 {
   border-radius: 5%;
   color: #d4d5cc;
   font-weight: 700;
-  font-size: clamp(10px, 1.5vw, 16px);
+  font-size: clamp(10px, 2.5vw, 18px);
   border: 1px solid #0f0;
   padding: clamp(1px, 0.8vw, 4px) clamp(5px, 1.5vw, 12px) clamp(1px, 0.8vw, 4px)
     clamp(5px, 1.5vw, 12px);
-  box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.5);
+  box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.5);
 }
 
 /*/ ////////////////////Phase de la lune///////////////////////////////////*/
