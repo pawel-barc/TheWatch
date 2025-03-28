@@ -69,10 +69,10 @@ function setMoonPhase() {
   let shadowPosition;
   // Si la phase est inférieure à 0.5, on simule la progression entre le premier quartier et la plaine lune
   if (phase < 0.5) {
-    shadowPosition = 30 * (1 - phase * 2);
+    shadowPosition = 40 * (1 - phase * 2);
   } else {
     // Si la phase est supérieure à 0.5, on simule la progression entre la plaine lune et la nouvelle lune
-    shadowPosition = 30 * ((phase - 0.5) * 2);
+    shadowPosition = 40 * ((phase - 0.5) * 2);
   }
 
   // Calcul de l'opacité de l'ombre (valeur entre 0 et 1)
@@ -92,3 +92,54 @@ function setMoonPhase() {
 // Mise à jour automatique toutes les minutes
 setInterval(setMoonPhase, 60000);
 setMoonPhase();
+
+////////////////Fonction qui gère le petit cadran du jour ///////////////////////////////
+
+const daysContainer = document.getElementById("days-container-id");
+const daysDialMarkersContainer = document.getElementById(
+  "days-dial-markers-id"
+);
+
+const days = ["LUN", "MAR", "MER", "JEU", "VEN", "SAM", "DIM"];
+// Calcul des angles entre chaque jour
+const stepAngle = 360 / days.length;
+days.forEach((day, i) => {
+  const span = document.createElement("span");
+  span.classList.add("day");
+  span.style.setProperty("--angle", `${i * stepAngle}deg`); //Positionnement en rotation
+  span.textContent = day;
+  daysContainer.appendChild(span);
+});
+//Création des marqueurs (graduation) pour chaque jour
+for (let i = 0; i < 7; i++) {
+  const dayMarker = document.createElement("div");
+  dayMarker.classList.add("day-marker");
+  dayMarker.style.transform = `rotate(${i * stepAngle + 25.7}deg)`; // Placement des marqueurs
+  daysDialMarkersContainer.appendChild(dayMarker);
+}
+// Fonction pour ajouster dynamiquement la taille de la police en fonction de la taille du cadran
+function updateFontSize() {
+  const dial = document.getElementById("days-dial-id");
+  const dialSize = dial.offsetWidth;
+  document.documentElement.style.setProperty("--dial-size", `${dialSize}px`); // Ajustement de la police
+}
+// Écouteur d'événement pour ajuster la taille de la police en cas de redimensionnement
+window.addEventListener("resize", updateFontSize);
+updateFontSize();
+
+// Fonction pour indiquer le jour courant dans le petit cadran
+function dayHandFocus() {
+  const dayHand = document.getElementById("days-dial-hand-id");
+  const now = new Date();
+  let dayOfWeek = now.getDay(); // Le jour actuel de la semaine(0 - 6)
+  // Ajuster l'index pour que le Lundi soit le jour 0 et Dimanche soit le jour 6
+  dayOfWeek = (dayOfWeek + 6) % 7;
+  const stepAngle = 360 / 7;
+  const dayAngle = dayOfWeek * stepAngle;
+  dayHand.classList.add("days-dial-hand");
+  // Appliquer la transformation pour faire tourner l'aiguille du jour
+  dayHand.style.transform = `rotate(${dayAngle}deg)`;
+}
+// Mise à jour de l'aiguille du jour chaque minute
+setInterval(dayHandFocus, 60000);
+dayHandFocus();
